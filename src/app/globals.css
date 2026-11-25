@@ -1,0 +1,614 @@
+@import "tailwindcss";
+
+@theme {
+  /* From the logo: brand orange, near-black, and the prototype's greys. */
+  --color-primary: #eb5e22;
+  --color-primary-strong: #c84a16; /* the brand orange one step darker: behind white text it reaches 4.7:1 (the brand gives 3.4) */
+  --color-neutral: #141110;
+  --color-card: #d9d9d9; /* the grey panels */
+  --color-line: #e3e3e3; /* product card borders */
+  --color-muted: #6b6b6b; /* inactive tabs, breadcrumb (#757575 in the prototype, darkened to pass 4.5:1 on grey) */
+  --color-whatsapp: #2f7d57;
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif; /* small UI text: cards, product page */
+
+  --ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@layer base {
+  html {
+    /* 16px up to ~1440px wide, then grows (≈18.6px at 1920) so the layout keeps the prototype's proportions on big screens. */
+    font-size: clamp(100%, 0.5rem + 0.55vw, 125%);
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* While the phone menu is open the page underneath must not scroll. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-primary-strong);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Menu links of the bar (uiverse.io, WhiteNervosa): grey to white, with a line that grows from the middle. */
+  .nav-link {
+    position: relative;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #e1e1e1;
+    transition: color 400ms var(--ease-soft);
+  }
+  .nav-link::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition:
+      width 400ms var(--ease-soft),
+      left 400ms var(--ease-soft);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: #fff;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after {
+    width: 100%;
+    left: 0;
+  }
+
+  /* Cotizar (uiverse.io, AlimurtuzaCodes): orange pill; on hover a soft WhatsApp green that lifts 2px and glows. */
+  .btn-quote {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 2.75rem; /* touch target: 44px */
+    padding: 0 1.6em;
+    border-radius: 999px;
+    background: var(--color-primary-strong);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 600;
+    transition: all 450ms ease-in-out;
+  }
+  .btn-quote svg {
+    width: 1.35em;
+    height: 1.35em;
+    flex: none;
+    transition: transform 800ms ease;
+  }
+  .btn-quote:hover,
+  .btn-quote:active {
+    background: linear-gradient(0deg, var(--color-whatsapp), #4aa176);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.4),
+      inset 0 -4px 0 0 rgb(0 0 0 / 0.2),
+      0 0 0 4px rgb(255 255 255 / 0.2),
+      0 0 60px 0 rgb(74 161 118 / 0.35);
+    transform: translateY(-2px);
+  }
+  .btn-quote:active {
+    transition-duration: 150ms; /* phones have no hover: the green shows while the finger is down */
+  }
+  .btn-quote:hover svg {
+    transform: scale(1.2);
+  }
+
+  /* Ver catálogo completo (uiverse.io, barisdogansutcu): black pill; on hover orange, wider letters and an orange glow. */
+  .btn-catalog {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 1.05em 2.5em;
+    border-radius: 999px;
+    background: #000;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    transition: all 0.5s ease;
+  }
+  .btn-catalog:hover,
+  .btn-catalog:active {
+    letter-spacing: 3px;
+    background: var(--color-primary);
+    color: #000;
+    box-shadow: rgb(235 94 34 / 0.55) 0 7px 29px 0;
+  }
+  .btn-catalog:active {
+    box-shadow: none;
+    transform: translateY(4px);
+    transition-duration: 100ms;
+  }
+
+  /* Category chips: the chosen one is black with white text, painted by .chip-pill (below) so it can glide between them. */
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    min-height: 2.75rem;
+    padding: 0 1.1rem;
+    border-radius: 999px;
+    border: 1.5px solid #000;
+    background: #fff;
+    font-weight: 800;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  /* A white pill that inverts what is under it: the white chip turns black and its black letters white. */
+  .chip-pill {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #fff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+}
+
+/*
+ * Changing category (CatalogView.tsx). The grey panel stays and grows or shrinks to fit; the chips slide with it and the
+ * black pill glides from the old chip to the new one. The category under CATÁLOGO swipes: up for a chip further right,
+ * down for one further left; it rises in from below when a category is picked from Todos and drops out on the way back.
+ * Leaving or entering the catalogue (:only-child: no partner on the other page), these parts fade with the page.
+ */
+.catalog-head {
+  view-transition-name: catalog-head;
+}
+.catalog-sub {
+  view-transition-name: catalog-sub;
+}
+.catalog-chips {
+  view-transition-name: catalog-chips;
+}
+.chip-pill {
+  view-transition-name: chip-pill;
+}
+::view-transition-old(catalog-head),
+::view-transition-new(catalog-head) {
+  /* both pictures pinned to the top, uncropped and unscaled, inside the panel's changing height */
+  animation: none;
+  height: 100%;
+  object-fit: none;
+  object-position: top;
+}
+::view-transition-old(catalog-chips),
+::view-transition-old(chip-pill) {
+  display: none;
+}
+::view-transition-new(catalog-chips),
+::view-transition-new(chip-pill) {
+  animation: none;
+}
+::view-transition-old(catalog-head):only-child,
+::view-transition-old(catalog-chips):only-child {
+  display: block;
+  animation: vt-out 150ms ease-in both;
+}
+::view-transition-new(catalog-head):only-child,
+::view-transition-new(catalog-chips):only-child {
+  animation: vt-in 260ms 110ms ease-out both;
+}
+::view-transition-group(catalog-head),
+::view-transition-group(catalog-chips),
+::view-transition-group(chip-pill) {
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+::view-transition-group(chip-pill) {
+  mix-blend-mode: difference; /* the picture of the pill is plain white: blend it here as the live one does */
+}
+::view-transition-group(catalog-sub) {
+  overflow: clip; /* the words swipe through the subtitle's own window */
+}
+::view-transition-old(catalog-sub) {
+  animation: sub-out 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+::view-transition-new(catalog-sub) {
+  animation: sub-in 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+html:active-view-transition-type(cat-prev)::view-transition-old(catalog-sub) {
+  animation-name: sub-out-down;
+}
+html:active-view-transition-type(cat-prev)::view-transition-new(catalog-sub) {
+  animation-name: sub-in-down;
+}
+@keyframes sub-out {
+  to {
+    translate: 0 -110%;
+  }
+}
+@keyframes sub-in {
+  from {
+    translate: 0 110%;
+  }
+}
+@keyframes sub-out-down {
+  to {
+    translate: 0 110%;
+  }
+}
+@keyframes sub-in-down {
+  from {
+    translate: 0 -110%;
+  }
+}
+
+/*
+ * Page changes dissolve (React plays them through <ViewTransition> in layout.tsx). The old page fades out first and the
+ * new one fades in after it, never both at once: crossfading two pages (one scrolled, one at the top) reads as a double
+ * exposure. The bar (root) holds still. Shared elements (.morph: a product's photo) glide to their new place instead.
+ */
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(*) {
+  animation: vt-out 150ms ease-in both;
+}
+::view-transition-new(*) {
+  animation: vt-in 260ms 110ms ease-out both;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+/*
+ * The page itself (layout.tsx) is one tall layer whose place on screen depends on the scroll. Left to the default, a page
+ * change between two scroll positions (deep in the catalogue ⇄ the top of a product) slid the whole page by that
+ * distance. So the old page goes at once and the new one fades in already in place; only shared photos travel.
+ */
+::view-transition-group(page) {
+  animation: none;
+}
+::view-transition-old(page) {
+  display: none;
+}
+::view-transition-new(page) {
+  animation: vt-in 260ms ease-out both;
+}
+::view-transition-old(.morph) {
+  animation: none;
+  opacity: 0;
+}
+::view-transition-new(.morph) {
+  animation: none;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * The way into the catalogue (CatalogLoader.tsx): the dark screen rises from the bottom, CARGANDO appears in grey and
+ * fills with orange behind a travelling wave (an SVG wave used as a mask that moves up and sideways). The screen keeps its
+ * own view-transition layer so the page change underneath never shows through it.
+ */
+.catalog-loader {
+  view-transition-name: catalog-loader;
+}
+::view-transition-group(catalog-loader),
+::view-transition-new(catalog-loader) {
+  animation: none;
+}
+/* Above every other layer of the page change: the catalogue's own layers (its grey panel) must not show through it. */
+::view-transition-group(catalog-loader),
+::view-transition-group(intro) {
+  z-index: 1;
+}
+::view-transition-old(catalog-loader) {
+  display: none;
+}
+.loader-field {
+  animation: loader-in 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.catalog-loader [role="status"] {
+  animation: vt-in 300ms 200ms ease-out both;
+}
+.loader-fill {
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 150' preserveAspectRatio='none'%3E%3Cpath d='M0 10Q25 0 50 10T100 10V150H0Z'/%3E%3C/svg%3E")
+    0 1.3em / 1.6em 2.6em repeat-x;
+  animation: loader-fill 2.2s 350ms linear both;
+}
+@keyframes loader-in {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+/*
+ * It fills in steps, like a load that comes in chunks (after neoleaf): about a third, past half, most of the word, then
+ * full, resting in between. The wave keeps drifting sideways through the rests, so the edge never freezes.
+ * y is where the wave sits; measured on screen, the word reads empty from about 0.85em and full by about 0.25em.
+ */
+@keyframes loader-fill {
+  0% {
+    mask-position: 0 1em;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  16% {
+    mask-position: -1.1em 0.67em;
+  }
+  30% {
+    mask-position: -2.1em 0.64em;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  46% {
+    mask-position: -3.2em 0.52em;
+  }
+  58% {
+    mask-position: -4em 0.49em;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  76% {
+    mask-position: -5.3em 0.37em;
+  }
+  86% {
+    mask-position: -6em 0.34em;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  100% {
+    mask-position: -7em 0.1em;
+  }
+}
+
+/* Reviews carousel (ReviewsCarousel.tsx): the chosen card is centred; the row's edges fade out. */
+.reviews-viewport {
+  --card: min(80vw, 23rem);
+  --gap: 1.25rem;
+  mask-image: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  touch-action: pan-y; /* horizontal swipes belong to the carousel, vertical ones still scroll the page */
+}
+@media (width >= 48rem) {
+  .reviews-viewport {
+    --gap: 2rem;
+  }
+}
+.reviews-track {
+  padding-inline: calc(50% - var(--card) / 2);
+}
+.review {
+  /* A light spring: overshoots ~7% and settles (after the CodePen's elastic.out). */
+  transition:
+    translate 750ms
+      linear(0, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.5%, 1.061 24.6%, 1.068 28.5%, 1.056 32.8%, 1.024 40.6%, 0.996 50.4%, 0.993 56.4%, 1.001 75.4%, 1),
+    border-color 400ms,
+    box-shadow 400ms,
+    background-color 400ms;
+}
+
+/* Phone menu: slides in from the right (300 ms, ease-out) and back out (250 ms, ease-in). */
+.drawer {
+  translate: 100% 0;
+  transition:
+    translate 250ms ease-in,
+    overlay 250ms ease-in allow-discrete,
+    display 250ms ease-in allow-discrete;
+}
+.drawer[open] {
+  translate: 0 0;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+}
+@starting-style {
+  .drawer[open] {
+    translate: 100% 0;
+  }
+}
+.drawer::backdrop {
+  background: transparent;
+}
+
+/* Product pages on phones: room under the footer for the fixed Cotizar bar (QuoteCta.tsx). */
+@media (width < 48rem) {
+  body:has(.sticky-quote) footer {
+    padding-bottom: 7rem;
+  }
+}
+
+/* Fresh lists (a category, more products) fade in. */
+.fade-in {
+  animation: fade-in 200ms ease-out both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * Opening of the home page. The sign is treated as a physical object (beats in intro-timing.ts).
+ * While the 3D loads, an orange alarm glow breathes at the foot of the dark screen. Then Intro.tsx runs the whole
+ * choreography on one clock (Web Animations): the sign rises out of that light turning, lands face-on and catches
+ * one sweep of light, rests, and glides along an arc onto the bar's logo while the field clears; the headline
+ * slides in during the second half of the flight. Any tap, key or scroll skips it.
+ * html.intro-on (inline script in page.tsx) marks a visit where it plays; html.seen, one where it does not.
+ */
+:root {
+  --intro-shift: 120px;
+}
+@media (width >= 80rem) {
+  :root {
+    --intro-shift: 300px;
+  }
+}
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--color-neutral); /* takes the first tap, which skips (Intro.tsx), so it never lands on a hidden link */
+  /*
+   * Its own layer in React's page transitions: loading the 3D sign is a Suspense reveal, which fades the page wrapper
+   * out and in; inside that wrapper the dark field went grey for a moment. As a layer of its own it simply stays put.
+   */
+  view-transition-name: intro;
+}
+::view-transition-group(intro),
+::view-transition-new(intro) {
+  animation: none;
+}
+::view-transition-old(intro) {
+  display: none;
+}
+/* The very first frame, before the page has arrived, is dark like the field instead of a white blink. */
+@media (prefers-reduced-motion: no-preference) {
+  html.intro-on:not(.intro-done) {
+    background: var(--color-neutral);
+  }
+}
+.intro:not(.go) {
+  animation: intro-hide 0.5s 6s forwards; /* never trap the page if the script fails to start the opening */
+}
+/* Loading cue: the alarm light the sign will rise out of. */
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 70vh;
+  background: radial-gradient(55% 60% at 50% 100%, rgb(235 94 34 / 0.3), transparent 70%);
+  animation: intro-breathe 1.2s ease-in-out 4 alternate; /* finite: the wait for the 3D tops out at 2.5 s */
+}
+.intro.go::before {
+  animation: intro-hide 1.2s ease-out forwards;
+}
+.intro-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(637px, 70vmin);
+  aspect-ratio: 1;
+  translate: -50% 100vh; /* waits below the screen */
+}
+/* The landing's sweep of light (animated by Intro.tsx), clipped to the octagon: its edges sit 1.2% in from the logo box. */
+.intro-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: polygon(29.8% 1.2%, 70.2% 1.2%, 98.8% 29.8%, 98.8% 70.2%, 70.2% 98.8%, 29.8% 98.8%, 1.2% 70.2%, 1.2% 29.8%);
+  background: linear-gradient(110deg, transparent 38%, rgb(255 255 255 / 0.4) 50%, transparent 62%) 150% 0 / 250% 100% no-repeat;
+  opacity: 0;
+}
+/*
+ * The bar stays hidden while the field is dark and fades in as it clears. Under the field it is invisible anyway, but
+ * React's page <ViewTransition> (layout.tsx) also runs on loads inside the page; for a frame it lifts the page into
+ * its own layer and the fixed bar would flash above the field.
+ * Its logo waits for the sign to land on it, so the brand is never on screen twice.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .intro-on header {
+    transition: opacity 0.5s ease-out;
+  }
+  .intro-on:not(.intro-words) header {
+    opacity: 0;
+    animation: intro-show 0s 7s forwards; /* failsafe */
+  }
+  .intro-on:not(.intro-done) header img {
+    opacity: 0;
+    animation: intro-show 0s 7s forwards; /* failsafe */
+  }
+}
+@keyframes intro-breathe {
+  from {
+    opacity: 0.4;
+  }
+}
+@keyframes intro-hide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes intro-show {
+  to {
+    opacity: 1;
+  }
+}
+/* The headline is painted from the start (under the dark field, so it counts as the page's main content at once), off to the sides. */
+.hero-left {
+  --from: calc(var(--intro-shift) * -1);
+}
+.hero-right {
+  --from: var(--intro-shift);
+}
+.hero-left,
+.hero-right {
+  translate: var(--from) 0;
+}
+.intro-words :is(.hero-left, .hero-right) {
+  translate: 0 0;
+  transition: translate 0.9s var(--ease-soft);
+}
+.intro-words .hero-right {
+  transition-delay: 80ms;
+}
+.seen :is(.hero-left, .hero-right) {
+  translate: 0 0;
+  animation: hero-in 0.9s 0.1s var(--ease-soft) both;
+}
+@keyframes hero-in {
+  from {
+    translate: var(--from) 0;
+  }
+}
+.seen .intro {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .intro {
+    display: none;
+  }
+  .hero-left,
+  .hero-right {
+    translate: none;
+  }
+  *,
+  *::before,
+  *::after,
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "categories": [
+    {
+      "slug": "camaras",
+      "name": "Cámaras",
+      "title": "Cámaras de seguridad y accesorios",
+      "image": "/img/cat-camaras.jpg",
+      "products": [
+        { "name": "Cámaras Wi-Fi IMOU", "image": "/products/889.png" },
+        { "name": "Cámara IMOU Ranger con giro", "image": "/products/891.png" },
+        { "name": "Línea IMOU para el hogar", "image": "/products/895.png" },
+        { "name": "Cámaras Dahua", "image": "/products/897.png" },
+        { "name": "Cámaras Dahua ColorVu a color de noche", "image": "/products/901.png" },
+        { "name": "Cámaras Dahua domo y bala", "image": "/products/903.png" },
+        { "name": "Cámaras Dahua bala y PTZ", "image": "/products/906.png" },
+        { "name": "Cámaras Hikvision PTZ con zoom 25x", "image": "/products/908.png" },
+        { "name": "Cámaras Hikvision domo y bala", "image": "/products/910.png" },
+        { "name": "DVR Turbo HD Hikvision de 4 a 32 canales", "image": "/products/858.png" },
+        { "name": "DVR Dahua de 4 a 32 canales", "image": "/products/860.png" },
+        { "name": "Discos duros de 1 a 4 TB", "image": "/products/862.png" },
+        { "name": "Fuente de 12 V de 1 A y 2 A", "image": "/products/864.png" },
+        { "name": "Video balun RJ45", "image": "/products/866.png" },
+        { "name": "Borneras", "image": "/products/868.png" },
+        { "name": "Conectores video balun", "image": "/products/870.png" },
+        { "name": "Regulador de corriente", "image": "/products/873.png" },
+        { "name": "Regleta de corriente", "image": "/products/875.png" },
+        { "name": "UPS", "image": "/products/877.png" },
+        { "name": "Rack metálico para DVR", "image": "/products/879.png" },
+        { "name": "Cable UTP para interior 5e y 6", "image": "/products/881.png" },
+        { "name": "Cable UTP para exterior 5e y 6", "image": "/products/883.png" },
+        { "name": "Cable dúplex", "image": "/products/885.png" },
+        { "name": "Cajas plásticas para exterior", "image": "/products/887.png" }
+      ]
+    },
+    {
+      "slug": "alarmas",
+      "name": "Alarmas",
+      "title": "Alarmas y accesorios",
+      "image": "/img/cat-alarmas.png",
+      "products": [
+        { "name": "Tarjeta controladora DSC Power de 4 a 32 zonas", "image": "/products/807.png" },
+        { "name": "Teclado alfanumérico DSC", "image": "/products/809.png" },
+        { "name": "Detector de movimiento infrarrojo DSC", "image": "/products/811.png" },
+        { "name": "Contactos magnéticos DSC para puertas y ventanas", "image": "/products/813.png" },
+        { "name": "Contacto magnético DSC tipo pesado", "image": "/products/815.png" },
+        { "name": "Llavero inalámbrico de 4 botones", "image": "/products/819.png" },
+        { "name": "Sirena de 12 V y 30 W", "image": "/products/805.png" },
+        { "name": "Batería de 12 V y 7 A", "image": "/products/803.png" },
+        { "name": "Fuente para alarma", "image": "/products/817.png" },
+        { "name": "Gabinete para alarma", "image": "/products/801.png" }
+      ]
+    },
+    {
+      "slug": "cercas",
+      "name": "Cercas",
+      "title": "Cercas eléctricas",
+      "image": "/img/cat-cercas.png",
+      "products": [
+        { "name": "Panel electrificador de 1.500 a 10.000 metros", "image": "/products/1019.png" },
+        { "name": "Rollo de alambre acerado de 1.000 metros", "image": "/products/1021.png" },
+        { "name": "Paral con aisladores de inicio y fin", "image": "/products/1020.png" },
+        { "name": "Aislador de paso", "image": "/products/1024.png" },
+        { "name": "Aislador tipo pera con varilla", "image": "/products/1025.png" },
+        { "name": "Avisos de precaución", "image": "/products/1022.png" },
+        { "name": "Sirena de 20 W", "image": "/products/1029.png" },
+        { "name": "Sirena de 30 W", "image": "/products/1030.png" },
+        { "name": "Sirena de polea de 110 V", "image": "/products/1031.png" },
+        { "name": "Batería para cerca eléctrica", "image": "/products/1026.png" }
+      ]
+    },
+    {
+      "slug": "motores",
+      "name": "Motores",
+      "title": "Motores y brazos para puertas eléctricas",
+      "image": "/img/cat-motores.png",
+      "products": [
+        { "name": "Motor para puerta corrediza de 500 kg", "image": "/products/926.png" },
+        { "name": "Motor para puerta corrediza de 850 kg", "image": "/products/928.png" },
+        { "name": "Motor para puerta corrediza de 1.200 kg", "image": "/products/931.png" },
+        { "name": "Brazos para puertas de 250 kg por hoja", "image": "/products/916.png" },
+        { "name": "Brazos para puertas de 350 kg por hoja", "image": "/products/920.png" },
+        { "name": "Brazos para puertas de 600 kg por hoja", "image": "/products/923.png" },
+        { "name": "Fotoceldas de seguridad", "image": "/products/933.png" },
+        { "name": "Control remoto inalámbrico", "image": "/products/937.png" },
+        { "name": "Baterías de respaldo para motor", "image": "/products/935.png" },
+        { "name": "Luz de aviso estroboscópica", "image": "/products/939.png" }
+      ]
+    }
+  ]
+}
